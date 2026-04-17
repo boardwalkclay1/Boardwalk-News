@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Boardwalk Newsletter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="bw-header">
+    <h1>Boardwalk Newsletter</h1>
+    <p>BeltLine. Rinks. Global skate culture. Twice a week.</p>
+  </header>
+
+  <main class="bw-main">
+    <section class="bw-card">
+      <h2>Subscribe</h2>
+      <form id="subscribeForm">
+        <label>
+          Email
+          <input type="email" name="email" placeholder="you@example.com">
+        </label>
+
+        <label>
+          Phone (optional)
+          <input type="tel" name="phone" placeholder="+1 404 555 1234">
+        </label>
+
+        <fieldset>
+          <legend>How do you want to receive it?</legend>
+          <label><input type="checkbox" name="channelEmail" checked> Email</label>
+          <label><input type="checkbox" name="channelSms"> SMS / Text</label>
+          <label><input type="checkbox" name="channelApp"> App (push / in-app)</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>What do you care about?</legend>
+          <label><input type="checkbox" name="topicBeltline" checked> BeltLine & Atlanta</label>
+          <label><input type="checkbox" name="topicSkatingLocal" checked> Atlanta Skating</label>
+          <label><input type="checkbox" name="topicSkatingNational" checked> U.S. Skating</label>
+          <label><input type="checkbox" name="topicSkatingGlobal"> Global Skating</label>
+        </fieldset>
+
+        <label>
+          Frequency
+          <select name="frequency">
+            <option value="twice-weekly" selected>Twice a week</option>
+            <option value="weekly">Once a week</option>
+            <option value="digest">Big events only</option>
+          </select>
+        </label>
+
+        <button type="submit">Sign Up</button>
+        <p id="subscribeStatus" class="bw-status"></p>
+      </form>
+    </section>
+
+    <section class="bw-card">
+      <h2>Latest Issues</h2>
+      <ul id="issuesList" class="bw-issues-list">
+        <!-- Filled by app.js from /data/issues/index.json when you add it -->
+      </ul>
+    </section>
+  </main>
+
+  <footer class="bw-footer">
+    <p>© Boardwalk Clay – Boardwalk Newsletter</p>
+  </footer>
+
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
