@@ -65,7 +65,7 @@ function buildSubscriberFromForm(form) {
     preferences,
     createdAt: now,
     verified: false,
-    verifyToken: crypto.randomUUID() // ⭐ for email verification
+    verifyToken: crypto.randomUUID()
   };
 }
 
@@ -73,9 +73,10 @@ function buildSubscriberFromForm(form) {
 // SEND SUBSCRIBER TO GITHUB (repo_dispatch)
 // ===============================
 async function sendSubscriberToGitHub(subscriber) {
-  const owner = "YOUR_GITHUB_USERNAME";   // ⭐ replace
-  const repo = "YOUR_REPO_NAME";          // ⭐ replace
-  const token = "YOUR_GITHUB_PAT";        // ⭐ replace
+  // ⭐ Cloudflare Pages Environment Variables
+  const owner = import.meta.env.GITHUB_OWNER;
+  const repo = import.meta.env.GITHUB_REPO;
+  const token = import.meta.env.GITHUB_PAT;
 
   const payload = {
     event_type: "add_subscriber",
@@ -121,60 +122,3 @@ function setupSubscribeForm() {
   const statusEl = document.getElementById("subscribeStatus");
   if (!form) return;
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    statusEl.textContent = "Saving your preferences...";
-    statusEl.className = "bw-status";
-
-    const subscriber = buildSubscriberFromForm(form);
-
-    try {
-      await sendSubscriberToGitHub(subscriber);
-
-      // ⭐ redirect to success page
-      window.location.href = "/success.html";
-    } catch (err) {
-      console.warn("GitHub dispatch failed, storing locally only", err);
-      saveSubscriberLocally(subscriber);
-      statusEl.textContent = "Saved locally. Backend not connected yet.";
-      statusEl.className = "bw-status err";
-    }
-
-    form.reset();
-  });
-}
-
-// ===============================
-// LOAD ISSUES LIST
-// ===============================
-async function loadIssuesList() {
-  const listEl = document.getElementById("issuesList");
-  if (!listEl) return;
-
-  try {
-    const res = await fetch("/data/issues/index.json", { cache: "no-store" });
-    if (!res.ok) throw new Error("No index yet");
-    const issues = await res.json();
-
-    if (!Array.isArray(issues) || !issues.length) {
-      listEl.innerHTML = "<li>No issues published yet.</li>";
-      return;
-    }
-
-    listEl.innerHTML = issues
-      .map((issue) => {
-        const date = issue.createdAt?.slice(0, 10) || issue.id;
-        return `<li><a href="/issues/issue-${issue.id}.html">${issue.title}</a> <span>(${date})</span></li>`;
-      })
-      .join("");
-  } catch {
-    listEl.innerHTML = "<li>Issues will appear here once you publish.</li>";
-  }
-}
-
-// ===============================
-// INIT
-// ===============================
-registerServiceWorker();
-setupSubscribeForm();
-loadIssuesList();
