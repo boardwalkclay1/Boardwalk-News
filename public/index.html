@@ -4,64 +4,122 @@
   <meta charset="utf-8">
   <title>Boardwalk Newsletter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/icons/favicon-32.png" sizes="32x32">
+  <link rel="icon" href="/icons/favicon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+
+  <!-- Manifest -->
   <link rel="manifest" href="/manifest.webmanifest">
+
+  <!-- Social preview -->
+  <meta property="og:title" content="Boardwalk Newsletter">
+  <meta property="og:description" content="BeltLine, rinks, and global skate culture—curated by Boardwalk Clay.">
+  <meta property="og:image" content="/social/boardwalk-preview.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+  <!-- BURGER + SLIDE NAV -->
   <header class="bw-header">
+    <button class="bw-burger" id="burgerBtn" aria-label="Open navigation">
+      ☰
+    </button>
     <h1>Boardwalk Newsletter</h1>
     <p>BeltLine. Rinks. Global skate culture. Twice a week.</p>
   </header>
 
-  <main class="bw-main">
-    <section class="bw-card">
-      <h2>Subscribe</h2>
-      <form id="subscribeForm">
-        <label>
-          Email
-          <input type="email" name="email" placeholder="you@example.com">
-        </label>
+  <nav class="bw-nav-drawer" id="navDrawer">
+    <button class="bw-nav-close" id="navCloseBtn" aria-label="Close navigation">×</button>
+    <ul>
+      <li><a href="/about.html">About Boardwalk Clay</a></li>
+      <li><a href="/newsletter-app.html">Newsletter App</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+      <li><a href="/privacy.html">Privacy & Subscription Terms</a></li>
+    </ul>
+  </nav>
 
-        <label>
-          Phone (optional)
-          <input type="tel" name="phone" placeholder="+1 404 555 1234">
-        </label>
+  <main class="bw-main bw-main-layout">
+    <!-- LEFT COLUMN: LATEST ISSUE ON TOP, SUBSCRIBE UNDER -->
+    <section class="bw-column-left">
+      <!-- Latest Issue -->
+      <section class="bw-card">
+        <h2>Latest Issue</h2>
+        <ul id="issuesList" class="bw-issues-list">
+          <!-- app.js will put latest issue first -->
+        </ul>
+      </section>
 
-        <fieldset>
-          <legend>How do you want to receive it?</legend>
-          <label><input type="checkbox" name="channelEmail" checked> Email</label>
-          <label><input type="checkbox" name="channelSms"> SMS / Text</label>
-          <label><input type="checkbox" name="channelApp"> App (push / in-app)</label>
-        </fieldset>
+      <!-- Subscribe -->
+      <section class="bw-card">
+        <h2>Subscribe (Free)</h2>
+        <p class="bw-subcopy">
+          Free newsletter. No paywall. Just BeltLine runs, rink nights, and global skate culture—curated by Boardwalk Clay.
+        </p>
+        <form id="subscribeForm">
+          <label>
+            Email
+            <input type="email" name="email" placeholder="you@example.com" required>
+          </label>
 
-        <fieldset>
-          <legend>What do you care about?</legend>
-          <label><input type="checkbox" name="topicBeltline" checked> BeltLine & Atlanta</label>
-          <label><input type="checkbox" name="topicSkatingLocal" checked> Atlanta Skating</label>
-          <label><input type="checkbox" name="topicSkatingNational" checked> U.S. Skating</label>
-          <label><input type="checkbox" name="topicSkatingGlobal"> Global Skating</label>
-        </fieldset>
+          <label>
+            Phone (optional)
+            <input type="tel" name="phone" placeholder="+1 404 555 1234">
+          </label>
 
-        <label>
-          Frequency
-          <select name="frequency">
-            <option value="twice-weekly" selected>Twice a week</option>
-            <option value="weekly">Once a week</option>
-            <option value="digest">Big events only</option>
-          </select>
-        </label>
+          <fieldset>
+            <legend>How do you want to receive it?</legend>
+            <label><input type="checkbox" name="channelEmail" checked> Email</label>
+            <label><input type="checkbox" name="channelSms"> SMS / Text</label>
+            <label><input type="checkbox" name="channelApp"> App (push / in-app)</label>
+          </fieldset>
 
-        <button type="submit">Sign Up</button>
-        <p id="subscribeStatus" class="bw-status"></p>
-      </form>
+          <fieldset>
+            <legend>What do you care about?</legend>
+            <label><input type="checkbox" name="topicBeltline" checked> BeltLine & Atlanta</label>
+            <label><input type="checkbox" name="topicSkatingLocal" checked> Atlanta Skating</label>
+            <label><input type="checkbox" name="topicSkatingNational" checked> U.S. Skating</label>
+            <label><input type="checkbox" name="topicSkatingGlobal"> Global Skating</label>
+          </fieldset>
+
+          <label>
+            Frequency
+            <select name="frequency">
+              <option value="twice-weekly" selected>Twice a week</option>
+              <option value="weekly">Once a week</option>
+              <option value="digest">Big events only</option>
+            </select>
+          </label>
+
+          <p class="bw-legal">
+            Free subscription. By signing up, you agree to the
+            <a href="/privacy.html" target="_blank">privacy & subscription terms</a>.
+          </p>
+
+          <button type="submit">Sign Up Free</button>
+          <p id="subscribeStatus" class="bw-status"></p>
+        </form>
+      </section>
     </section>
 
-    <section class="bw-card">
-      <h2>Latest Issues</h2>
-      <ul id="issuesList" class="bw-issues-list">
-        <!-- Filled by app.js from /data/issues/index.json when you add it -->
-      </ul>
-    </section>
+    <!-- RIGHT COLUMN: APP DOWNLOAD BUTTON LOWER ON VIEW -->
+    <aside class="bw-column-right">
+      <section class="bw-card bw-card-app-cta">
+        <h2>Boardwalk App (Coming Soon)</h2>
+        <p>
+          Unlock secret perks from Boardwalk himself—early drops, BeltLine meetups, rink nights, and surprise sessions.
+        </p>
+        <a href="/newsletter-app.html" class="bw-button-secondary">
+          Learn about the app
+        </a>
+        <button class="bw-button-primary bw-button-download">
+          Download App (soon)
+        </button>
+      </section>
+    </aside>
   </main>
 
   <footer class="bw-footer">
@@ -69,5 +127,23 @@
   </footer>
 
   <script src="/app.js" type="module"></script>
+  <script type="module">
+    // Simple burger menu toggle
+    const burgerBtn = document.getElementById("burgerBtn");
+    const navDrawer = document.getElementById("navDrawer");
+    const navCloseBtn = document.getElementById("navCloseBtn");
+
+    burgerBtn?.addEventListener("click", () => {
+      navDrawer.classList.add("open");
+    });
+
+    navCloseBtn?.addEventListener("click", () => {
+      navDrawer.classList.remove("open");
+    });
+
+    navDrawer?.addEventListener("click", (e) => {
+      if (e.target === navDrawer) navDrawer.classList.remove("open");
+    });
+  </script>
 </body>
 </html>
