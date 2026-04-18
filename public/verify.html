@@ -6,14 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/styles.css">
 </head>
+
 <body>
   <header class="bw-header">
-    <h1>Verifying…</h1>
+    <h1>Email Verification</h1>
   </header>
 
   <main class="bw-main">
     <section class="bw-card">
-      <p id="verifyStatus">Checking your token…</p>
+      <p id="verifyStatus" class="bw-status">Checking your token…</p>
     </section>
   </main>
 
@@ -24,15 +25,15 @@
       const status = document.getElementById("verifyStatus");
 
       if (!token) {
-        status.textContent = "Invalid verification link.";
+        status.textContent = "Invalid or missing verification token.";
         status.className = "bw-status err";
         return;
       }
 
-      // ⭐ Cloudflare Pages Environment Variables
+      // Cloudflare Pages env vars
       const owner = import.meta.env.GITHUB_OWNER;
       const repo = import.meta.env.GITHUB_REPO;
-      const tokenGH = import.meta.env.GITHUB_PAT;
+      const pat = import.meta.env.GITHUB_PAT;
 
       try {
         const res = await fetch(
@@ -41,7 +42,7 @@
             method: "POST",
             headers: {
               "Accept": "application/vnd.github+json",
-              "Authorization": `Bearer ${tokenGH}`
+              "Authorization": `Bearer ${pat}`
             },
             body: JSON.stringify({
               event_type: "verify_subscriber",
@@ -56,7 +57,7 @@
           return;
         }
 
-        status.textContent = "Your email is verified!";
+        status.textContent = "Your email has been verified!";
         status.className = "bw-status ok";
 
       } catch (err) {
