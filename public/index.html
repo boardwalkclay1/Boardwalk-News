@@ -25,23 +25,22 @@
 
 <body>
 
-  <!-- HEADER + NAV -->
+  <!-- HEADER -->
   <header class="bw-header">
-    <button class="bw-burger" id="burgerBtn" aria-label="Open navigation">☰</button>
     <h1>Boardwalk Newsletter</h1>
     <p>BeltLine. Rinks. Global skate culture. Twice a week.</p>
-  </header>
 
-  <nav class="bw-nav-drawer" id="navDrawer">
-    <button class="bw-nav-close" id="navCloseBtn" aria-label="Close navigation">×</button>
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/about.html">About Boardwalk Clay</a></li>
-      <li><a href="/newsletter-app.html">Newsletter App</a></li>
-      <li><a href="/contact.html">Contact</a></li>
-      <li><a href="/privacy.html">Privacy & Subscription Terms</a></li>
-    </ul>
-  </nav>
+    <!-- TOP NAV (VISIBLE LINKS) -->
+    <nav class="bw-nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about.html">About Boardwalk Clay</a></li>
+        <li><a href="/newsletter-app.html">Newsletter App</a></li>
+        <li><a href="/contact.html">Contact</a></li>
+        <li><a href="/privacy.html">Privacy & Subscription Terms</a></li>
+      </ul>
+    </nav>
+  </header>
 
   <!-- MAIN LAYOUT -->
   <main class="bw-main bw-main-layout">
@@ -49,7 +48,7 @@
     <!-- LEFT COLUMN -->
     <section class="bw-column-left">
 
-      <!-- ⭐ LATEST ISSUE FIRST -->
+      <!-- LATEST ISSUE FIRST -->
       <section class="bw-card">
         <h2>Latest Issue</h2>
 
@@ -62,7 +61,7 @@
         </p>
       </section>
 
-      <!-- ⭐ SUBSCRIBE SECOND -->
+      <!-- SUBSCRIBE SECOND -->
       <section class="bw-card">
         <h2>Subscribe (Free)</h2>
         <p class="bw-subcopy">
@@ -179,17 +178,6 @@
         metaEl.innerHTML = '<p>Unable to load latest issue.</p>';
       }
     }
-
-    // burger menu
-    const burgerBtn = document.getElementById("burgerBtn");
-    const navDrawer = document.getElementById("navDrawer");
-    const navCloseBtn = document.getElementById("navCloseBtn");
-
-    burgerBtn?.addEventListener("click", () => navDrawer.classList.add("open"));
-    navCloseBtn?.addEventListener("click", () => navDrawer.classList.remove("open"));
-    navDrawer?.addEventListener("click", (e) => {
-      if (e.target === navDrawer) navDrawer.classList.remove("open");
-    });
 
     loadLatestIssue();
   </script>
