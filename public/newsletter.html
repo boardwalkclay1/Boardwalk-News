@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>All Newsletter Issues – Boardwalk Newsletter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Favicon -->
+  <link rel="icon" href="/icons/favicon-32.png" sizes="32x32">
+  <link rel="icon" href="/icons/favicon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+
+  <!-- Manifest -->
+  <link rel="manifest" href="/manifest.webmanifest">
+
+  <!-- Social preview -->
+  <meta property="og:title" content="Boardwalk Newsletter – All Issues">
+  <meta property="og:description" content="Browse every issue of the Boardwalk Newsletter.">
+  <meta property="og:image" content="/social/boardwalk-preview.png">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="stylesheet" href="/styles.css">
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="bw-header">
+    <button class="bw-burger" id="burgerBtn" aria-label="Open navigation">☰</button>
+    <h1>All Newsletter Issues</h1>
+    <p>Every issue. Every drop. Straight from Boardwalk Clay.</p>
+  </header>
+
+  <!-- NAV DRAWER -->
+  <nav class="bw-nav-drawer" id="navDrawer">
+    <button class="bw-nav-close" id="navCloseBtn" aria-label="Close navigation">×</button>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about.html">About Boardwalk Clay</a></li>
+      <li><a href="/newsletter-app.html">Newsletter App</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+      <li><a href="/privacy.html">Privacy & Subscription Terms</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="bw-main">
+    <section class="bw-card">
+      <h2>All Issues</h2>
+      <ul id="allIssuesList" class="bw-issues-list">
+        <!-- JS will load all issues here -->
+      </ul>
+    </section>
+  </main>
+
+  <footer class="bw-footer">
+    <p>© Boardwalk Clay – Boardwalk Newsletter</p>
+  </footer>
+
+  <!-- JS: LOAD ALL ISSUES -->
+  <script type="module">
+    async function loadAllIssues() {
+      const listEl = document.getElementById('allIssuesList');
+
+      try {
+        const res = await fetch('/data/issues/index.json', { cache: 'no-store' });
+        const issues = await res.json();
+
+        if (!issues.length) {
+          listEl.innerHTML = '<li>No issues published yet.</li>';
+          return;
+        }
+
+        // Sort newest → oldest
+        issues.sort((a, b) => {
+          const da = a.createdAt || a.id;
+          const db = b.createdAt || b.id;
+          return da < db ? 1 : -1;
+        });
+
+        listEl.innerHTML = issues
+          .map(
+            (i) => `
+            <li class="bw-issue-item">
+              <a href="${i.path || `/issues/issue-${i.id}.html`}">
+                <strong>${i.title}</strong>
+                <span class="bw-issue-date">
+                  ${i.createdAt ? new Date(i.createdAt).toLocaleDateString() : ""}
+                </span>
+              </a>
+            </li>
+          `
+          )
+          .join('');
+      } catch (err) {
+        console.error('Failed to load issues', err);
+        listEl.innerHTML = '<li>Error loading issues.</li>';
+      }
+    }
+
+    // Burger menu
+    const burgerBtn = document.getElementById("burgerBtn");
+    const navDrawer = document.getElementById("navDrawer");
+    const navCloseBtn = document.getElementById("navCloseBtn");
+
+    burgerBtn?.addEventListener("click", () => navDrawer.classList.add("open"));
+    navCloseBtn?.addEventListener("click", () => navDrawer.classList.remove("open"));
+    navDrawer?.addEventListener("click", (e) => {
+      if (e.target === navDrawer) navDrawer.classList.remove("open");
+    });
+
+    loadAllIssues();
+  </script>
+</body>
+</html>
