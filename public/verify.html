@@ -25,27 +25,45 @@
 
       if (!token) {
         status.textContent = "Invalid verification link.";
+        status.className = "bw-status err";
         return;
       }
 
-      // Trigger GitHub Action to verify subscriber
-      const owner = "<YOUR_GITHUB_USERNAME>";
-      const repo = "<YOUR_REPO_NAME>";
-      const tokenGH = "<YOUR_GITHUB_PAT>";
+      // ⭐ Cloudflare Pages Environment Variables
+      const owner = import.meta.env.GITHUB_OWNER;
+      const repo = import.meta.env.GITHUB_REPO;
+      const tokenGH = import.meta.env.GITHUB_PAT;
 
-      await fetch(`https://api.github.com/repos/${owner}/${repo}/dispatches`, {
-        method: "POST",
-        headers: {
-          "Accept": "application/vnd.github+json",
-          "Authorization": `Bearer ${tokenGH}`
-        },
-        body: JSON.stringify({
-          event_type: "verify_subscriber",
-          client_payload: { token }
-        })
-      });
+      try {
+        const res = await fetch(
+          `https://api.github.com/repos/${owner}/${repo}/dispatches`,
+          {
+            method: "POST",
+            headers: {
+              "Accept": "application/vnd.github+json",
+              "Authorization": `Bearer ${tokenGH}`
+            },
+            body: JSON.stringify({
+              event_type: "verify_subscriber",
+              client_payload: { token }
+            })
+          }
+        );
 
-      status.textContent = "Your email is verified!";
+        if (!res.ok) {
+          status.textContent = "Verification failed. Please try again later.";
+          status.className = "bw-status err";
+          return;
+        }
+
+        status.textContent = "Your email is verified!";
+        status.className = "bw-status ok";
+
+      } catch (err) {
+        console.error("Verification error:", err);
+        status.textContent = "Verification failed. Please try again later.";
+        status.className = "bw-status err";
+      }
     }
 
     verify();
