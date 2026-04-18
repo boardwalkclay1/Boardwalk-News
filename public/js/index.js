@@ -43,7 +43,7 @@ async function loadLatestIssue() {
 }
 
 // ===============================
-// SUBSCRIBE FORM
+// SUBSCRIBE FORM (CLOUDFLARE FUNCTION)
 // ===============================
 document.getElementById("subscribeForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -55,15 +55,12 @@ document.getElementById("subscribeForm")?.addEventListener("submit", async (e) =
   const payload = Object.fromEntries(formData.entries());
 
   try {
-    await fetch("https://api.github.com/repos/boardwlkclay1/Newsletter/dispatches", {
+    await fetch("/api/dispatch", {
       method: "POST",
-      headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${localStorage.getItem("gh_token")}`
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        event_type: "subscribe_user",
-        client_payload: payload
+        action: "subscribe_user",
+        payload
       })
     });
 
