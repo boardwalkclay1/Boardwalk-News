@@ -48,9 +48,15 @@
       <!-- Latest Issue -->
       <section class="bw-card">
         <h2>Latest Issue</h2>
-        <ul id="issuesList" class="bw-issues-list">
-          <!-- app.js will put latest issue first -->
-        </ul>
+        <div id="latestIssueMeta" class="bw-latest-meta">
+          <!-- title + date will be injected -->
+        </div>
+        <div id="latestIssueFrameWrapper" class="bw-latest-frame-wrapper">
+          <!-- iframe with latest issue will be injected -->
+        </div>
+        <p class="bw-latest-link">
+          <a href="/newsletter.html">View all issues →</a>
+        </p>
       </section>
 
       <!-- Subscribe -->
@@ -127,7 +133,53 @@
   </footer>
 
   <script src="/app.js" type="module"></script>
+
+  <!-- INDEX-SPECIFIC SCRIPT: LOAD LATEST ISSUE -->
   <script type="module">
+    async function loadLatestIssue() {
+      const metaEl = document.getElementById('latestIssueMeta');
+      const frameWrapper = document.getElementById('latestIssueFrameWrapper');
+
+      try {
+        const res = await fetch('/data/issues/index.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('index.json not found');
+
+        const issues = await res.json();
+        if (!Array.isArray(issues) || issues.length === 0) {
+          metaEl.innerHTML = '<p>No issues published yet.</p>';
+          return;
+        }
+
+        // Sort by createdAt desc (fallback to id)
+        issues.sort((a, b) => {
+          const da = a.createdAt || a.id || 0;
+          const db = b.createdAt || b.id || 0;
+          return da < db ? 1 : -1;
+        });
+
+        const latest = issues[0];
+
+        metaEl.innerHTML = `
+          <h3>${latest.title || 'Boardwalk Newsletter'}</h3>
+          <p class="bw-latest-date">${latest.createdAt ? new Date(latest.createdAt).toLocaleString() : ''}</p>
+        `;
+
+        const issuePath = \`/issues/issue-\${latest.id}.html\`;
+
+        frameWrapper.innerHTML = `
+          <iframe
+            src="\${issuePath}"
+            class="bw-latest-iframe"
+            loading="lazy"
+            title="Latest Boardwalk Newsletter"
+          ></iframe>
+        `;
+      } catch (err) {
+        console.error('Failed to load latest issue', err);
+        metaEl.innerHTML = '<p>Unable to load latest issue right now.</p>';
+      }
+    }
+
     // Simple burger menu toggle
     const burgerBtn = document.getElementById("burgerBtn");
     const navDrawer = document.getElementById("navDrawer");
@@ -144,6 +196,8 @@
     navDrawer?.addEventListener("click", (e) => {
       if (e.target === navDrawer) navDrawer.classList.remove("open");
     });
+
+    loadLatestIssue();
   </script>
 </body>
 </html>
