@@ -25,9 +25,7 @@
 <body>
   <!-- BURGER + SLIDE NAV -->
   <header class="bw-header">
-    <button class="bw-burger" id="burgerBtn" aria-label="Open navigation">
-      ☰
-    </button>
+    <button class="bw-burger" id="burgerBtn" aria-label="Open navigation">☰</button>
     <h1>Boardwalk Newsletter</h1>
     <p>BeltLine. Rinks. Global skate culture. Twice a week.</p>
   </header>
@@ -43,28 +41,29 @@
   </nav>
 
   <main class="bw-main bw-main-layout">
-    <!-- LEFT COLUMN: LATEST ISSUE ON TOP, SUBSCRIBE UNDER -->
+    <!-- LEFT COLUMN -->
     <section class="bw-column-left">
-      <!-- Latest Issue -->
+
+      <!-- LATEST ISSUE -->
       <section class="bw-card">
         <h2>Latest Issue</h2>
-        <div id="latestIssueMeta" class="bw-latest-meta">
-          <!-- title + date will be injected -->
-        </div>
-        <div id="latestIssueFrameWrapper" class="bw-latest-frame-wrapper">
-          <!-- iframe with latest issue will be injected -->
-        </div>
+
+        <div id="latestIssueMeta" class="bw-latest-meta"></div>
+
+        <div id="latestIssueFrameWrapper" class="bw-latest-frame-wrapper"></div>
+
         <p class="bw-latest-link">
           <a href="/newsletter.html">View all issues →</a>
         </p>
       </section>
 
-      <!-- Subscribe -->
+      <!-- SUBSCRIBE -->
       <section class="bw-card">
         <h2>Subscribe (Free)</h2>
         <p class="bw-subcopy">
           Free newsletter. No paywall. Just BeltLine runs, rink nights, and global skate culture—curated by Boardwalk Clay.
         </p>
+
         <form id="subscribeForm">
           <label>
             Email
@@ -111,19 +110,15 @@
       </section>
     </section>
 
-    <!-- RIGHT COLUMN: APP DOWNLOAD BUTTON LOWER ON VIEW -->
+    <!-- RIGHT COLUMN -->
     <aside class="bw-column-right">
       <section class="bw-card bw-card-app-cta">
         <h2>Boardwalk App (Coming Soon)</h2>
         <p>
           Unlock secret perks from Boardwalk himself—early drops, BeltLine meetups, rink nights, and surprise sessions.
         </p>
-        <a href="/newsletter-app.html" class="bw-button-secondary">
-          Learn about the app
-        </a>
-        <button class="bw-button-primary bw-button-download">
-          Download App (soon)
-        </button>
+        <a href="/newsletter-app.html" class="bw-button-secondary">Learn about the app</a>
+        <button class="bw-button-primary bw-button-download">Download App (soon)</button>
       </section>
     </aside>
   </main>
@@ -134,7 +129,7 @@
 
   <script src="/app.js" type="module"></script>
 
-  <!-- INDEX-SPECIFIC SCRIPT: LOAD LATEST ISSUE -->
+  <!-- LOAD LATEST ISSUE -->
   <script type="module">
     async function loadLatestIssue() {
       const metaEl = document.getElementById('latestIssueMeta');
@@ -142,57 +137,49 @@
 
       try {
         const res = await fetch('/data/issues/index.json', { cache: 'no-store' });
-        if (!res.ok) throw new Error('index.json not found');
-
         const issues = await res.json();
-        if (!Array.isArray(issues) || issues.length === 0) {
+
+        if (!issues.length) {
           metaEl.innerHTML = '<p>No issues published yet.</p>';
           return;
         }
 
-        // Sort by createdAt desc (fallback to id)
+        // newest → oldest
         issues.sort((a, b) => {
-          const da = a.createdAt || a.id || 0;
-          const db = b.createdAt || b.id || 0;
+          const da = a.createdAt || a.id;
+          const db = b.createdAt || b.id;
           return da < db ? 1 : -1;
         });
 
         const latest = issues[0];
 
         metaEl.innerHTML = `
-          <h3>${latest.title || 'Boardwalk Newsletter'}</h3>
-          <p class="bw-latest-date">${latest.createdAt ? new Date(latest.createdAt).toLocaleString() : ''}</p>
+          <h3>${latest.title}</h3>
+          <p class="bw-latest-date">
+            ${latest.createdAt ? new Date(latest.createdAt).toLocaleString() : ""}
+          </p>
         `;
-
-        const issuePath = \`/issues/issue-\${latest.id}.html\`;
 
         frameWrapper.innerHTML = `
           <iframe
-            src="\${issuePath}"
+            src="${latest.path}"
             class="bw-latest-iframe"
             loading="lazy"
             title="Latest Boardwalk Newsletter"
           ></iframe>
         `;
       } catch (err) {
-        console.error('Failed to load latest issue', err);
-        metaEl.innerHTML = '<p>Unable to load latest issue right now.</p>';
+        metaEl.innerHTML = '<p>Unable to load latest issue.</p>';
       }
     }
 
-    // Simple burger menu toggle
+    // burger menu
     const burgerBtn = document.getElementById("burgerBtn");
     const navDrawer = document.getElementById("navDrawer");
     const navCloseBtn = document.getElementById("navCloseBtn");
 
-    burgerBtn?.addEventListener("click", () => {
-      navDrawer.classList.add("open");
-    });
-
-    navCloseBtn?.addEventListener("click", () => {
-      navDrawer.classList.remove("open");
-    });
-
+    burgerBtn?.addEventListener("click", () => navDrawer.classList.add("open"));
+    navCloseBtn?.addEventListener("click", () => navDrawer.classList.remove("open"));
     navDrawer?.addEventListener("click", (e) => {
       if (e.target === navDrawer) navDrawer.classList.remove("open");
     });
