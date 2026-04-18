@@ -64,6 +64,87 @@
 
       try {
         const res = await fetch('/data/issues/index.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error('index.json missing');
+
+        const issues = await res.json();
+
+        if (!Array.isArray(issues) || issues.length === 0) {
+          listEl.innerHTML = '<li>No issues published yet.</li>';
+          return;
+        }
+
+        // Sort newest → oldest
+        issues.sort((a, b) => {
+          const da = a.createdAt || a.id;
+          const db = b.createdAt || b.id;
+          return da < db ? 1 : -1;
+        });
+
+        listEl.innerHTML = issues
+          .map(
+            (i) => `
+              <li class="bw-issue-item">
+                <a href="${i.path}">
+                  <strong>${i.title}</strong>
+                  <span class="bw-issue-date">
+                    ${i.createdAt ? new Date(i.createdAt).toLocaleDateString() : ""}
+                  </span>
+                </a>
+              </li>
+            `
+          )
+          .join('');
+      } catch (err) {
+        console.error('Failed to load issues', err);
+        listEl.innerHTML = '<li>Error loading issues.</li>';
+      }
+    }
+
+    // Burger menu
+    const burgerBtn = document.getElementById("burgerBtn");
+    const navDrawer = document.getElementById("navDrawer");
+    const navCloseBtn = document.getElementById("navCloseBtn");
+
+    burgerBtn?.addEventListener("click", () => navDrawer.classList.add("open"));
+    navCloseBtn?.addEventListener("click", () => navDrawer.classList.remove("open"));
+    navDrawer?.addEventListener("click", (e) => {
+      if (e.target === navDrawer) navDrawer.classList.remove("open");
+    });
+
+    loadAllIssues();
+  </script>
+</body>
+</html>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/about.html">About Boardwalk Clay</a></li>
+      <li><a href="/newsletter-app.html">Newsletter App</a></li>
+      <li><a href="/contact.html">Contact</a></li>
+      <li><a href="/privacy.html">Privacy & Subscription Terms</a></li>
+    </ul>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="bw-main">
+    <section class="bw-card">
+      <h2>All Issues</h2>
+      <ul id="allIssuesList" class="bw-issues-list">
+        <!-- JS will load all issues here -->
+      </ul>
+    </section>
+  </main>
+
+  <footer class="bw-footer">
+    <p>© Boardwalk Clay – Boardwalk Newsletter</p>
+  </footer>
+
+  <!-- JS: LOAD ALL ISSUES -->
+  <script type="module">
+    async function loadAllIssues() {
+      const listEl = document.getElementById('allIssuesList');
+
+      try {
+        const res = await fetch('/data/issues/index.json', { cache: 'no-store' });
         const issues = await res.json();
 
         if (!issues.length) {
