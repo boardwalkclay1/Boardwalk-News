@@ -1,5 +1,8 @@
 // public/app.js
 
+// ===============================
+// SERVICE WORKER
+// ===============================
 async function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
     try {
@@ -10,6 +13,9 @@ async function registerServiceWorker() {
   }
 }
 
+// ===============================
+// BUILD SUBSCRIBER OBJECT
+// ===============================
 function buildSubscriberFromForm(form) {
   const data = new FormData(form);
 
@@ -24,21 +30,27 @@ function buildSubscriberFromForm(form) {
   };
 
   const preferences = {
-    beltlineOnly: data.get('topicBeltline') === 'on' &&
-                  data.get('topicSkatingLocal') !== 'on' &&
-                  data.get('topicSkatingNational') !== 'on' &&
-                  data.get('topicSkatingGlobal') !== 'on',
-    skatingOnly: data.get('topicBeltline') !== 'on' &&
-                 (data.get('topicSkatingLocal') === 'on' ||
-                  data.get('topicSkatingNational') === 'on' ||
-                  data.get('topicSkatingGlobal') === 'on'),
+    beltlineOnly:
+      data.get('topicBeltline') === 'on' &&
+      data.get('topicSkatingLocal') !== 'on' &&
+      data.get('topicSkatingNational') !== 'on' &&
+      data.get('topicSkatingGlobal') !== 'on',
+
+    skatingOnly:
+      data.get('topicBeltline') !== 'on' &&
+      (data.get('topicSkatingLocal') === 'on' ||
+       data.get('topicSkatingNational') === 'on' ||
+       data.get('topicSkatingGlobal') === 'on'),
+
     includeGlobal: data.get('topicSkatingGlobal') === 'on',
+
     topics: {
       beltline: data.get('topicBeltline') === 'on',
       skatingLocal: data.get('topicSkatingLocal') === 'on',
       skatingNational: data.get('topicSkatingNational') === 'on',
       skatingGlobal: data.get('topicSkatingGlobal') === 'on'
     },
+
     frequency: data.get('frequency') || 'twice-weekly'
   };
 
@@ -56,22 +68,45 @@ function buildSubscriberFromForm(form) {
   };
 }
 
-async function sendSubscriberToBackend(subscriber) {
-  // This is the hook into your “newsletter studio” backend.
-  // Later you implement /api/subscribe on Cloudflare / another service.
-  const res = await fetch('/api/subscribe', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(subscriber)
+// ===============================
+// SEND SUBSCRIBER TO GITHUB (repo_dispatch)
+// ===============================
+async function sendSubscriberToGitHub(subscriber) {
+  // IMPORTANT:
+  // Replace these with your actual GitHub username + repo name.
+  const owner = "<YOUR_GITHUB_USERNAME>";
+  const repo = "<YOUR_REPO_NAME>";
+
+  // This token must be stored in Cloudflare Pages environment variables
+  // OR replaced with a GitHub fine-scoped PAT.
+  const token = "<YOUR_GITHUB_PAT>";
+
+  const payload = {
+    event_type: "add_subscriber",
+    client_payload: {
+      subscriber: JSON.stringify(subscriber)
+    }
+  };
+
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/dispatches`, {
+    method: "POST",
+    headers: {
+      "Accept": "application/vnd.github+json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify(payload)
   });
 
   if (!res.ok) {
-    throw new Error(`Subscribe failed: ${res.status}`);
+    throw new Error(`GitHub dispatch failed: ${res.status}`);
   }
 
-  return res.json().catch(() => ({}));
+  return true;
 }
 
+// ===============================
+// LOCAL FALLBACK STORAGE
+// ===============================
 function saveSubscriberLocally(subscriber) {
   const key = 'boardwalk_subscribers_local';
   const existing = JSON.parse(localStorage.getItem(key) || '[]');
@@ -79,6 +114,9 @@ function saveSubscriberLocally(subscriber) {
   localStorage.setItem(key, JSON.stringify(existing));
 }
 
+// ===============================
+// SUBSCRIBE FORM HANDLER
+// ===============================
 function setupSubscribeForm() {
   const form = document.getElementById('subscribeForm');
   const statusEl = document.getElementById('subscribeStatus');
@@ -92,11 +130,11 @@ function setupSubscribeForm() {
     const subscriber = buildSubscriberFromForm(form);
 
     try {
-      await sendSubscriberToBackend(subscriber);
+      await sendSubscriberToGitHub(subscriber);
       statusEl.textContent = 'You are in. Check your email or app soon.';
       statusEl.className = 'bw-status ok';
     } catch (err) {
-      console.warn('Backend subscribe failed, storing locally only', err);
+      console.warn('GitHub dispatch failed, storing locally only', err);
       saveSubscriberLocally(subscriber);
       statusEl.textContent = 'Saved locally. Backend not connected yet.';
       statusEl.className = 'bw-status err';
@@ -106,6 +144,9 @@ function setupSubscribeForm() {
   });
 }
 
+// ===============================
+// LOAD ISSUES LIST
+// ===============================
 async function loadIssuesList() {
   const listEl = document.getElementById('issuesList');
   if (!listEl) return;
@@ -131,6 +172,9 @@ async function loadIssuesList() {
   }
 }
 
+// ===============================
+// INIT
+// ===============================
 registerServiceWorker();
 setupSubscribeForm();
 loadIssuesList();
