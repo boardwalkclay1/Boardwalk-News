@@ -6,6 +6,10 @@
   --muted: #9a8f7a;
   --border: #2a2a3a;
   --radius: 10px;
+
+  --btn-bg: #1f1f2d;
+  --btn-hover: #2a2a3a;
+  --btn-border: #3a3a4d;
 }
 
 *,
@@ -37,6 +41,36 @@ body {
   color: var(--muted);
 }
 
+/* NAVIGATION — LINKS → BUTTONS */
+.bw-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.bw-nav a {
+  display: inline-block;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  color: var(--text);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: 0.15s ease-in-out;
+}
+
+.bw-nav a:hover {
+  background: var(--btn-hover);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
 /* MAIN GRID */
 .bw-main-layout {
   max-width: 1100px;
@@ -48,7 +82,7 @@ body {
   align-items: start;
 }
 
-/* LEFT COLUMN — FIXED ORDER */
+/* LEFT COLUMN */
 .bw-column-left {
   display: flex;
   flex-direction: column;
@@ -173,6 +207,15 @@ button[type="submit"]:hover {
 @media (max-width: 800px) {
   .bw-main-layout {
     grid-template-columns: 1fr;
+  }
+
+  .bw-nav ul {
+    gap: 0.4rem;
+  }
+
+  .bw-nav a {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
   }
 
   .bw-column-right {
