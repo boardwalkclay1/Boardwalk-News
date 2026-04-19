@@ -14,6 +14,7 @@ async function loadLatestIssue() {
       return;
     }
 
+    // Sort newest → oldest
     issues.sort((a, b) => {
       const da = a.createdAt || a.id;
       const db = b.createdAt || b.id;
@@ -22,6 +23,7 @@ async function loadLatestIssue() {
 
     const latest = issues[0];
 
+    // Metadata
     metaEl.innerHTML = `
       <h3>${latest.title}</h3>
       <p class="bw-latest-date">
@@ -29,12 +31,22 @@ async function loadLatestIssue() {
       </p>
     `;
 
+    // Prevent homepage from loading itself
+    // Ensure ONLY newsletter HTML files load
+    const safePath =
+      latest.path &&
+      latest.path !== "/" &&
+      !latest.path.includes("index.html")
+        ? latest.path
+        : `/issues/${latest.id}.html`;
+
     frameWrapper.innerHTML = `
       <iframe
-        src="${latest.path}"
+        src="${safePath}"
         class="bw-latest-iframe"
         loading="lazy"
         title="Latest Boardwalk Newsletter"
+        style="width:100%; height:100%; border:none;"
       ></iframe>
     `;
   } catch (err) {
