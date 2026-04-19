@@ -1,7 +1,7 @@
 {
   "name": "Boardwalk Newsletter",
   "short_name": "Boardwalk",
-  "start_url": "public",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#050509",
   "theme_color": "#f5c15c",
