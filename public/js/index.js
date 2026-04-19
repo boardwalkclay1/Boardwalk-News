@@ -1,9 +1,9 @@
 // ===============================
-// LOAD LATEST ISSUE
+// LOAD LATEST ISSUE (NO IFRAME)
 // ===============================
 async function loadLatestIssue() {
   const metaEl = document.getElementById('latestIssueMeta');
-  const frameWrapper = document.getElementById('latestIssueFrameWrapper');
+  const linkEl = document.getElementById('latestIssueLink');
 
   try {
     const res = await fetch('/data/issues/index.json', { cache: 'no-store' });
@@ -14,7 +14,7 @@ async function loadLatestIssue() {
       return;
     }
 
-    // Sort newest → oldest
+    // newest → oldest
     issues.sort((a, b) => {
       const da = a.createdAt || a.id;
       const db = b.createdAt || b.id;
@@ -23,68 +23,16 @@ async function loadLatestIssue() {
 
     const latest = issues[0];
 
-    // Metadata
     metaEl.innerHTML = `
       <h3>${latest.title}</h3>
-      <p class="bw-latest-date">
-        ${latest.createdAt ? new Date(latest.createdAt).toLocaleString() : ""}
-      </p>
+      <p>${latest.createdAt ? new Date(latest.createdAt).toLocaleString() : ""}</p>
     `;
 
-    // Prevent homepage from loading itself
-    // Ensure ONLY newsletter HTML files load
-    const safePath =
-      latest.path &&
-      latest.path !== "/" &&
-      !latest.path.includes("index.html")
-        ? latest.path
-        : `/issues/${latest.id}.html`;
-
-    frameWrapper.innerHTML = `
-      <iframe
-        src="${safePath}"
-        class="bw-latest-iframe"
-        loading="lazy"
-        title="Latest Boardwalk Newsletter"
-        style="width:100%; height:100%; border:none;"
-      ></iframe>
-    `;
+    // link to the actual newsletter file
+    linkEl.href = latest.path;
   } catch (err) {
     metaEl.innerHTML = '<p>Unable to load latest issue.</p>';
   }
 }
 
-// ===============================
-// SUBSCRIBE FORM (CLOUDFLARE FUNCTION)
-// ===============================
-document.getElementById("subscribeForm")?.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const status = document.getElementById("subscribeStatus");
-  status.textContent = "Submitting…";
-
-  const formData = new FormData(e.target);
-  const payload = Object.fromEntries(formData.entries());
-
-  try {
-    await fetch("/api/dispatch", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "subscribe_user",
-        payload
-      })
-    });
-
-    status.textContent = "Check your email to verify!";
-    status.className = "bw-status ok";
-  } catch {
-    status.textContent = "Subscription failed.";
-    status.className = "bw-status err";
-  }
-});
-
-// ===============================
-// INIT
-// ===============================
 loadLatestIssue();
