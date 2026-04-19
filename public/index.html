@@ -5,15 +5,11 @@
   <title>Boardwalk Newsletter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Favicon -->
   <link rel="icon" href="/icons/favicon-32.png" sizes="32x32">
   <link rel="icon" href="/icons/favicon-192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
-
-  <!-- Manifest -->
   <link rel="manifest" href="/manifest.webmanifest">
 
-  <!-- Social preview -->
   <meta property="og:title" content="Boardwalk Newsletter">
   <meta property="og:description" content="BeltLine, rinks, and global skate culture—curated by Boardwalk Clay.">
   <meta property="og:image" content="/social/boardwalk-preview.png">
@@ -30,102 +26,86 @@
     <h1>Boardwalk Newsletter</h1>
     <p>BeltLine. Rinks. Global skate culture. Twice a week.</p>
 
-    <!-- TOP NAV (VISIBLE LINKS) -->
     <nav class="bw-nav">
       <ul>
         <li><a href="/">Home</a></li>
-        <li><a href="/about.html">About Boardwalk Clay</a></li>
-        <li><a href="/newsletter-app.html">Newsletter App</a></li>
-        <li><a href="/contact.html">Contact</a></li>
-        <li><a href="/privacy.html">Privacy & Subscription Terms</a></li>
+        <li><a href="/pages/about.html">About Boardwalk Clay</a></li>
+        <li><a href="/pages/newsletter-app.html">Newsletter App</a></li>
+        <li><a href="/pages/contact.html">Contact</a></li>
+        <li><a href="/pages/privacy.html">Privacy & Subscription Terms</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- MAIN LAYOUT -->
-  <main class="bw-main bw-main-layout">
+  <!-- MAIN -->
+  <main class="bw-main">
 
-    <!-- LEFT COLUMN -->
-    <section class="bw-column-left">
+    <!-- FULL PAGE NEWSLETTER -->
+    <section class="bw-card">
+      <h2>Latest Issue</h2>
 
-      <!-- LATEST ISSUE FIRST -->
-      <section class="bw-card">
-        <h2>Latest Issue</h2>
+      <div id="latestIssueMeta" class="bw-latest-meta"></div>
 
-        <div id="latestIssueMeta" class="bw-latest-meta"></div>
+      <div id="latestIssueFrameWrapper" class="bw-latest-frame-wrapper" style="height: 80vh;">
+        <!-- iframe injected here -->
+      </div>
 
-        <div id="latestIssueFrameWrapper" class="bw-latest-frame-wrapper"></div>
-
-        <p class="bw-latest-link">
-          <a href="/newsletter.html">View all issues →</a>
-        </p>
-      </section>
-
-      <!-- SUBSCRIBE SECOND -->
-      <section class="bw-card">
-        <h2>Subscribe (Free)</h2>
-        <p class="bw-subcopy">
-          Free newsletter. No paywall. Just BeltLine runs, rink nights, and global skate culture—curated by Boardwalk Clay.
-        </p>
-
-        <form id="subscribeForm">
-          <label>
-            Email
-            <input type="email" name="email" placeholder="you@example.com" required>
-          </label>
-
-          <label>
-            Phone (optional)
-            <input type="tel" name="phone" placeholder="+1 404 555 1234">
-          </label>
-
-          <fieldset>
-            <legend>How do you want to receive it?</legend>
-            <label><input type="checkbox" name="channelEmail" checked> Email</label>
-            <label><input type="checkbox" name="channelSms"> SMS / Text</label>
-            <label><input type="checkbox" name="channelApp"> App (push / in-app)</label>
-          </fieldset>
-
-          <fieldset>
-            <legend>What do you care about?</legend>
-            <label><input type="checkbox" name="topicBeltline" checked> BeltLine & Atlanta</label>
-            <label><input type="checkbox" name="topicSkatingLocal" checked> Atlanta Skating</label>
-            <label><input type="checkbox" name="topicSkatingNational" checked> U.S. Skating</label>
-            <label><input type="checkbox" name="topicSkatingGlobal"> Global Skating</label>
-          </fieldset>
-
-          <label>
-            Frequency
-            <select name="frequency">
-              <option value="twice-weekly" selected>Twice a week</option>
-              <option value="weekly">Once a week</option>
-              <option value="digest">Big events only</option>
-            </select>
-          </label>
-
-          <p class="bw-legal">
-            Free subscription. By signing up, you agree to the
-            <a href="/privacy.html" target="_blank">privacy & subscription terms</a>.
-          </p>
-
-          <button type="submit">Sign Up Free</button>
-          <p id="subscribeStatus" class="bw-status"></p>
-        </form>
-      </section>
-
+      <p class="bw-latest-link">
+        <a href="/pages/newsletter.html">View all issues →</a>
+      </p>
     </section>
 
-    <!-- RIGHT COLUMN -->
-    <aside class="bw-column-right">
-      <section class="bw-card bw-card-app-cta">
-        <h2>Boardwalk App (Coming Soon)</h2>
-        <p>
-          Unlock secret perks from Boardwalk himself—early drops, BeltLine meetups, rink nights, and surprise sessions.
+    <!-- SUBSCRIBE UNDERNEATH -->
+    <section class="bw-card">
+      <h2>Subscribe (Free)</h2>
+      <p class="bw-subcopy">
+        Free newsletter. No paywall. Just BeltLine runs, rink nights, and global skate culture—curated by Boardwalk Clay.
+      </p>
+
+      <form id="subscribeForm">
+        <label>
+          Email
+          <input type="email" name="email" placeholder="you@example.com" required>
+        </label>
+
+        <label>
+          Phone (optional)
+          <input type="tel" name="phone" placeholder="+1 404 555 1234">
+        </label>
+
+        <fieldset>
+          <legend>How do you want to receive it?</legend>
+          <label><input type="checkbox" name="channelEmail" checked> Email</label>
+          <label><input type="checkbox" name="channelSms"> SMS / Text</label>
+          <label><input type="checkbox" name="channelApp"> App (push / in-app)</label>
+        </fieldset>
+
+        <fieldset>
+          <legend>What do you care about?</legend>
+          <label><input type="checkbox" name="topicBeltline" checked> BeltLine & Atlanta</label>
+          <label><input type="checkbox" name="topicSkatingLocal" checked> Atlanta Skating</label>
+          <label><input type="checkbox" name="topicSkatingNational" checked> U.S. Skating</label>
+          <label><input type="checkbox" name="topicSkatingGlobal"> Global Skating</label>
+        </fieldset>
+
+        <label>
+          Frequency
+          <select name="frequency">
+            <option value="twice-weekly" selected>Twice a week</option>
+            <option value="weekly">Once a week</option>
+            <option value="digest">Big events only</option>
+          </select>
+        </label>
+
+        <p class="bw-legal">
+          Free subscription. By signing up, you agree to the
+          <a href="/pages/privacy.html" target="_blank">privacy & subscription terms</a>.
         </p>
-        <a href="/newsletter-app.html" class="bw-button-secondary">Learn about the app</a>
-        <button class="bw-button-primary bw-button-download">Download App (soon)</button>
-      </section>
-    </aside>
+
+        <button type="submit">Sign Up Free</button>
+        <p id="subscribeStatus" class="bw-status"></p>
+      </form>
+    </section>
 
   </main>
 
@@ -133,54 +113,8 @@
     <p>© Boardwalk Clay – Boardwalk Newsletter</p>
   </footer>
 
-  <script src="/app.js" type="module"></script>
-
-  <!-- LOAD LATEST ISSUE -->
-  <script type="module">
-    async function loadLatestIssue() {
-      const metaEl = document.getElementById('latestIssueMeta');
-      const frameWrapper = document.getElementById('latestIssueFrameWrapper');
-
-      try {
-        const res = await fetch('/data/issues/index.json', { cache: 'no-store' });
-        const issues = await res.json();
-
-        if (!issues.length) {
-          metaEl.innerHTML = '<p>No issues published yet.</p>';
-          return;
-        }
-
-        // newest → oldest
-        issues.sort((a, b) => {
-          const da = a.createdAt || a.id;
-          const db = b.createdAt || b.id;
-          return da < db ? 1 : -1;
-        });
-
-        const latest = issues[0];
-
-        metaEl.innerHTML = `
-          <h3>${latest.title}</h3>
-          <p class="bw-latest-date">
-            ${latest.createdAt ? new Date(latest.createdAt).toLocaleString() : ""}
-          </p>
-        `;
-
-        frameWrapper.innerHTML = `
-          <iframe
-            src="${latest.path}"
-            class="bw-latest-iframe"
-            loading="lazy"
-            title="Latest Boardwalk Newsletter"
-          ></iframe>
-        `;
-      } catch (err) {
-        metaEl.innerHTML = '<p>Unable to load latest issue.</p>';
-      }
-    }
-
-    loadLatestIssue();
-  </script>
+  <script src="/js/index.js" type="module"></script>
+  <script src="/js/subscribe.js" type="module"></script>
 
 </body>
 </html>
