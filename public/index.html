@@ -9,17 +9,19 @@
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
 
+  <!-- SOCIAL -->
   <meta property="og:title" content="Boardwalk Newsletter">
   <meta property="og:description" content="BeltLine, rinks, and global skate culture—curated by Boardwalk Clay.">
   <meta property="og:image" content="/social/boardwalk-preview.png">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
 
-  <!-- BACKGROUND IMAGE -->
+  <!-- BACKGROUND IMAGE (FULL IMAGE, NO CROPPING) -->
   <style>
     body {
-      background: url("/images/news.jpg") no-repeat center center fixed;
-      background-size: cover;
+      background: #000 url("/images/news.jpg") no-repeat center center;
+      background-size: contain; /* show entire image */
+      background-attachment: fixed;
       margin: 0;
       font-family: system-ui, sans-serif;
       color: #f5f2e9;
@@ -27,6 +29,7 @@
     @media (max-width: 768px) {
       body {
         background-attachment: scroll;
+        background-size: contain;
         background-position: center top;
       }
     }
