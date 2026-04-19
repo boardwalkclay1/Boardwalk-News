@@ -10,8 +10,10 @@
   --btn-bg: #1f1f2d;
   --btn-hover: #2a2a3a;
   --btn-border: #3a3a4d;
+  --btn-accent-border: #f5c15c;
 }
 
+/* RESET */
 *,
 *::before,
 *::after {
@@ -41,7 +43,7 @@ body {
   color: var(--muted);
 }
 
-/* NAVIGATION — LINKS → BUTTONS */
+/* NAVIGATION — BUTTON LINKS */
 .bw-nav ul {
   list-style: none;
   padding: 0;
@@ -66,31 +68,16 @@ body {
 
 .bw-nav a:hover {
   background: var(--btn-hover);
-  border-color: var(--accent);
+  border-color: var(--btn-accent-border);
   color: var(--accent);
   transform: translateY(-1px);
 }
 
 /* MAIN GRID */
-.bw-main-layout {
-  max-width: 1100px;
+.bw-main {
+  max-width: 900px;
   margin: 0 auto 3rem;
   padding: 0 1rem;
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 1.5rem;
-  align-items: start;
-}
-
-/* LEFT COLUMN */
-.bw-column-left {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* RIGHT COLUMN */
-.bw-column-right {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -108,6 +95,26 @@ body {
 .bw-card h2 {
   margin-top: 0;
   margin-bottom: 0.75rem;
+}
+
+/* “OPEN LATEST ISSUE” BUTTON */
+.bw-latest-link a {
+  display: inline-block;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  color: var(--text);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: 0.15s ease-in-out;
+}
+
+.bw-latest-link a:hover {
+  background: var(--btn-hover);
+  border-color: var(--btn-accent-border);
+  color: var(--accent);
+  transform: translateY(-1px);
 }
 
 /* FORM ELEMENTS */
@@ -142,6 +149,7 @@ legend {
   color: var(--muted);
 }
 
+/* SUBMIT BUTTON */
 button[type="submit"] {
   margin-top: 0.5rem;
   padding: 0.6rem 1.2rem;
@@ -155,6 +163,26 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   filter: brightness(1.05);
+}
+
+/* PRIVACY LINK → BUTTON STYLE */
+.bw-legal a {
+  display: inline-block;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  background: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: 0.15s ease-in-out;
+}
+
+.bw-legal a:hover {
+  background: var(--btn-hover);
+  border-color: var(--btn-accent-border);
+  color: var(--accent);
+  transform: translateY(-1px);
 }
 
 /* STATUS TEXT */
@@ -173,28 +201,6 @@ button[type="submit"]:hover {
   color: #ff7b7b;
 }
 
-/* ISSUES LIST */
-.bw-issues-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.bw-issues-list li {
-  padding: 0.4rem 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.9rem;
-}
-
-.bw-issues-list a {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-.bw-issues-list a:hover {
-  text-decoration: underline;
-}
-
 /* FOOTER */
 .bw-footer {
   text-align: center;
@@ -205,10 +211,6 @@ button[type="submit"]:hover {
 
 /* MOBILE */
 @media (max-width: 800px) {
-  .bw-main-layout {
-    grid-template-columns: 1fr;
-  }
-
   .bw-nav ul {
     gap: 0.4rem;
   }
@@ -218,7 +220,13 @@ button[type="submit"]:hover {
     font-size: 0.85rem;
   }
 
-  .bw-column-right {
-    order: 3;
+  .bw-latest-link a {
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .bw-legal a {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.8rem;
   }
 }
