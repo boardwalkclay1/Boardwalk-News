@@ -16,6 +16,23 @@
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
 
+  <!-- BACKGROUND IMAGE HERE LIKE YOU ASKED -->
+  <style>
+    body {
+      background: url("/images/news.jpg") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      color: #f5f2e9;
+    }
+    @media (max-width: 768px) {
+      body {
+        background-attachment: scroll;
+        background-position: center top;
+      }
+    }
+  </style>
+
   <link rel="stylesheet" href="/styles.css">
 </head>
 
@@ -40,22 +57,18 @@
   <!-- MAIN -->
   <main class="bw-main">
 
-    <!-- FULL PAGE NEWSLETTER -->
+    <!-- LATEST ISSUE (NO IFRAME, JUST A LINK) -->
     <section class="bw-card">
       <h2>Latest Issue</h2>
 
       <div id="latestIssueMeta" class="bw-latest-meta"></div>
 
-      <div id="latestIssueFrameWrapper" class="bw-latest-frame-wrapper" style="height: 80vh;">
-        <!-- iframe injected here -->
-      </div>
-
       <p class="bw-latest-link">
-        <a href="/pages/newsletter.html">View all issues →</a>
+        <a id="latestIssueLink" href="/pages/newsletter.html">Open latest issue →</a>
       </p>
     </section>
 
-    <!-- SUBSCRIBE UNDERNEATH -->
+    <!-- SUBSCRIBE -->
     <section class="bw-card">
       <h2>Subscribe (Free)</h2>
       <p class="bw-subcopy">
